@@ -1,0 +1,186 @@
+document.addEventListener('DOMContentLoaded', () => {
+  // Offer date
+  const e = document.getElementById('offer-date');
+  if (e) {
+    const t = new Date();
+    t.setDate(t.getDate() + 3);
+    e.textContent = `${String(t.getDate()).padStart(2, '0')}/${String(t.getMonth() + 1).padStart(2, '0')}/${t.getFullYear()}`;
+  }
+
+  // FAQ
+  document.querySelectorAll('.faq-item').forEach(e => {
+    const t = e.querySelector('.faq-question');
+    t.addEventListener('click', () => {
+      const a = e.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(e => {
+        e.classList.remove('open');
+        e.querySelector('.arrow').textContent = '▼';
+      });
+      if (!a) {
+        e.classList.add('open');
+        t.querySelector('.arrow').textContent = '▲';
+      }
+    });
+  });
+
+  // Carousel 1 (Palavrinhas Mágicas)
+  const t = [
+    { img: 'https://i.imgur.com/HACWK4i.png', content: `<h3 style="font-size: 1.3rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px;">🧩 Como funciona</h3><ol style="margin-left: 20px; margin-bottom: 15px;"><li style="margin-bottom: 5px;">A criança vê a imagem</li><li style="margin-bottom: 5px;">As letras aparecem embaralhadas</li><li style="margin-bottom: 5px;">Ela precisa montar a palavra correta</li></ol><p><strong>Exemplo:</strong></p><p style="margin-left: 10px;">⚽ imagem &rarr; BOLA<br>Se acertar, ganha uma estrela ⭐.</p>` },
+    { img: 'https://i.imgur.com/tyUekos.png', content: `<h3 style="font-size: 1.3rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px;">📚 200+ palavras para praticar</h3><p>O jogo inclui mais de 200 palavras usadas no processo de alfabetização.</p><p style="margin-top: 10px;">Assim, seu filho pode treinar:</p><ul style="list-style: none; padding-left: 10px; margin-top: 10px;"><li>✔ leitura</li><li>✔ identificação de letras</li><li>✔ formação de palavras</li></ul><p style="margin-top: 10px;">de forma simples e divertida.</p>` },
+    { img: 'https://i.imgur.com/UrtNeIX.png', content: `<h3 style="font-size: 1.3rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px;">⭐ Sistema de conquistas</h3><p>Cada palavra correta gera uma estrela.</p><p style="margin-top: 10px;">Isso transforma o aprendizado em um jogo que a criança quer continuar jogando.</p>` }
+  ];
+
+  t.forEach(item => {
+    const im = new Image();
+    im.src = item.img;
+  });
+
+  const a = document.getElementById('carousel-img'), n = document.getElementById('carousel-text'), r = document.getElementById('btn-prev'), o = document.getElementById('btn-next'), c = document.getElementById('carousel-dots');
+  if (a && n && r && o && c) {
+    let e = 0;
+    let t1;
+    t.forEach((_, t) => {
+      const a = document.createElement('div');
+      a.classList.add('dot');
+      if (t === 0) a.classList.add('active');
+      a.addEventListener('click', () => l(t));
+      c.appendChild(a);
+    });
+    function l(t) { e = t; s(); }
+    function s() {
+      clearTimeout(t1);
+      a.style.opacity = '0';
+      n.style.opacity = '0';
+      t1 = setTimeout(() => {
+        a.src = t[e].img;
+        n.innerHTML = t[e].content;
+        document.querySelectorAll('#carousel-dots .dot').forEach((t, a) => { t.classList.toggle('active', a === e); });
+        a.style.opacity = '1';
+        n.style.opacity = '1';
+      }, 150);
+    }
+    r.addEventListener('click', () => { e = (e - 1 + t.length) % t.length; s(); });
+    o.addEventListener('click', () => { e = (e + 1) % t.length; s(); });
+    s();
+  }
+
+  // Carousel 2: Jogo da Primeira Letra
+  const c2Images = [
+    'https://i.imgur.com/tVeIUTB.png',
+    'https://i.imgur.com/bcKiF4v.png',
+    'https://i.imgur.com/W5vpgbD.png',
+    'https://i.imgur.com/fWx29aS.png',
+    'https://i.imgur.com/CFScbIw.png'
+  ];
+
+  c2Images.forEach(src => {
+    const limg = new Image();
+    limg.src = src;
+  });
+
+  const img2 = document.getElementById('carousel-img-2'), prev2 = document.getElementById('btn-prev-2'), next2 = document.getElementById('btn-next-2'), dots2 = document.getElementById('carousel-dots-2');
+  if(img2 && prev2 && next2 && dots2) {
+    let idx2 = 0;
+    let t2;
+    c2Images.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.classList.add('dot');
+      if(i===0) d.classList.add('active');
+      d.addEventListener('click', () => { idx2 = i; updateC2(); });
+      dots2.appendChild(d);
+    });
+    function updateC2() {
+      clearTimeout(t2);
+      img2.style.opacity = '0';
+      t2 = setTimeout(() => {
+        img2.src = c2Images[idx2];
+        document.querySelectorAll('#carousel-dots-2 .dot').forEach((d, i) => d.classList.toggle('active', i === idx2));
+        img2.style.opacity = '1';
+      }, 150);
+    }
+    prev2.addEventListener('click', () => { idx2 = (idx2 - 1 + c2Images.length) % c2Images.length; updateC2(); });
+    next2.addEventListener('click', () => { idx2 = (idx2 + 1) % c2Images.length; updateC2(); });
+    updateC2();
+  }
+
+  // Carousel 3: Desafio 365 da Leitura
+  const c3Cards = [
+    {
+      img: 'https://i.imgur.com/84YiDkP.png',
+      title: 'Aprendiz das Letras',
+      desc: 'A criança começa reconhecendo letras e lendo sílabas simples.<br><br><strong>Exemplo:</strong><br>M / MA – ME – MI – MO – MU'
+    },
+    {
+      img: 'https://i.imgur.com/UhzGxIU.png',
+      img2: 'https://i.imgur.com/rSOGoo6.png',
+      title: 'Caçador de Palavras',
+      desc: 'A criança pratica a leitura de palavras e também completa palavras com letras faltando.<br><br><strong>Exemplos:</strong><br>AVIÃO<br>V_OLÃ_'
+    },
+    {
+      img: 'https://i.imgur.com/c80XahN.png',
+      title: 'Mestre das Frases',
+      desc: 'A criança aprende a ler frases curtas e começa a entender pequenas ideias.<br><br><strong>Exemplo:</strong><br>O pinguim vive no gelo.'
+    },
+    {
+      img: 'https://i.imgur.com/M1F5A4s.png',
+      title: 'Grande Leitor',
+      desc: 'No último nível a criança lê pequenos textos e desenvolve confiança na leitura.<br><br><strong>Exemplo:</strong><br>O atleta corre muito.<br>Ele ganhou a medalha.<br>O atleta é campeão.'
+    }
+  ];
+
+  c3Cards.forEach(c => {
+    const limg1 = new Image();
+    limg1.src = c.img;
+    if (c.img2) {
+      const limg2 = new Image();
+      limg2.src = c.img2;
+    }
+  });
+  
+  const c3Container = document.getElementById('carousel-cards-3');
+  const prev3 = document.getElementById('btn-prev-3');
+  const next3 = document.getElementById('btn-next-3');
+  const dots3 = document.getElementById('carousel-dots-3');
+  
+  if (c3Container && prev3 && next3 && dots3) {
+    let idx3 = 0;
+    let t3;
+    c3Cards.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.classList.add('dot');
+      if (i === 0) d.classList.add('active');
+      d.addEventListener('click', () => { idx3 = i; updateC3(); });
+      dots3.appendChild(d);
+    });
+    
+    function updateC3() {
+        clearTimeout(t3);
+        c3Container.style.opacity = '0';
+        t3 = setTimeout(() => {
+            const card = c3Cards[idx3];
+            let imagesHtml = '';
+            if (card.img2) {
+                imagesHtml = `<div style="display:flex;gap:10px;justify-content:center;margin-bottom:15px;">
+                    <img src="${card.img}" style="width:48%;border-radius:10px;" alt="Nível" loading="eager">
+                    <img src="${card.img2}" style="width:48%;border-radius:10px;" alt="Nível" loading="eager">
+                </div>`;
+            } else {
+                imagesHtml = `<img src="${card.img}" style="width:100%;max-width:250px;border-radius:10px;margin:0 auto 15px;display:block;" alt="Nível" loading="eager">`;
+            }
+            
+            c3Container.innerHTML = `
+                ${imagesHtml}
+                <h3 style="color:var(--primary-dark);font-weight:900;font-size:1.4rem;margin-bottom:10px;">${card.title}</h3>
+                <p style="font-size:1rem;color:var(--text-dark);">${card.desc}</p>
+            `;
+            
+            document.querySelectorAll('#carousel-dots-3 .dot').forEach((d, i) => d.classList.toggle('active', i === idx3));
+            c3Container.style.opacity = '1';
+        }, 150);
+    }
+    
+    prev3.addEventListener('click', () => { idx3 = (idx3 - 1 + c3Cards.length) % c3Cards.length; updateC3(); });
+    next3.addEventListener('click', () => { idx3 = (idx3 + 1) % c3Cards.length; updateC3(); });
+    updateC3();
+  }
+});
